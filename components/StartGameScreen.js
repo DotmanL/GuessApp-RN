@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   Button,
   TouchableWithoutFeedback,
@@ -13,6 +12,9 @@ import Card from './Card';
 import Colors from '../constants/colors';
 import Input from './Input';
 import NumberContainer from './NumberContainer';
+import BodyText from './BodyText';
+import TitleText from './TitleText';
+import CustomButton from './CustomButton';
 
 const StartGameScreen = (props) => {
   const [enteredValue, setEnteredValue] = useState('');
@@ -49,12 +51,11 @@ const StartGameScreen = (props) => {
   if (confirmed) {
     confirmedOutput = (
       <Card style={styles.summaryContainer}>
-        <Text>You Selected</Text>
+        <BodyText>You Selected</BodyText>
         <NumberContainer>{selectedNumber}</NumberContainer>
-        <Button
-          title="START GAME"
-          onPress={() => props.onStartGame(selectedNumber)}
-        />
+        <CustomButton onPress={() => props.onStartGame(selectedNumber)}>
+          START GAME
+        </CustomButton>
       </Card>
     );
   }
@@ -69,9 +70,9 @@ const StartGameScreen = (props) => {
       }}
     >
       <View style={styles.screen}>
-        <Text style={styles.title}> Start a New Game</Text>
+        <TitleText style={styles.title}> Start a New Game</TitleText>
         <Card style={styles.inputContainer}>
-          <Text>Select a Number</Text>
+          <BodyText>Select a Number</BodyText>
           <Input
             style={styles.input}
             blurOnSubmit
@@ -120,6 +121,7 @@ const styles = StyleSheet.create({
     width: 300,
     maxWidth: '80%',
     alignItems: 'center',
+    marginTop: 15,
   },
   buttonContainer: {
     flexDirection: 'row',
