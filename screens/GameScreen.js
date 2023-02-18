@@ -8,11 +8,11 @@ import {
   FlatList,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import NumberContainer from './NumberContainer';
-import BodyText from './BodyText';
-import Card from './Card';
+import NumberContainer from '../components/NumberContainer';
+import BodyText from '../components/BodyText';
+import Card from '../components/Card';
 import DefaultStyles from '../constants/default-styles';
-import CustomButton from './CustomButton';
+import CustomButton from '../components/CustomButton';
 
 const generateRandomBetween = (min, max, exclude) => {
   min = Math.ceil(min);

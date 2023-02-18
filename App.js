@@ -1,13 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { StyleSheet, ImageBackground, SafeAreaView } from 'react-native';
 import { useFonts } from 'expo-font';
-//change to use expo-splash screen
-import AppLoading from 'expo-app-loading';
+import { LinearGradient } from 'expo-linear-gradient';
+import * as SplashScreen from 'expo-splash-screen';
 import Header from './components/Header';
-import StartGameScreen from './components/StartGameScreen';
-import GameScreen from './components/GameScreen';
-import GameOverScreen from './components/GameOverScreen';
+import StartGameScreen from './screens/StartGameScreen';
+import GameScreen from './screens/GameScreen';
+import GameOverScreen from './screens/GameOverScreen';
+
+SplashScreen.preventAutoHideAsync();
 
 const App = () => {
   const [userNumber, setUserNumber] = useState();
@@ -18,8 +20,21 @@ const App = () => {
     'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
   });
 
+  useEffect(() => {
+    async function prepare() {
+      await SplashScreen.preventAutoHideAsync();
+    }
+    prepare();
+  }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return null;
   }
 
   const createNewGameHandler = () => {
@@ -53,17 +68,31 @@ const App = () => {
   }
 
   return (
-    <View style={styles.screen}>
-      <StatusBar style="auto" />
-      <Header title="Guess a Number" />
-      {content}
-    </View>
+    <LinearGradient
+      colors={['red', 'orange']}
+      style={styles.rootScreen}
+      onLayout={onLayoutRootView}
+    >
+      <ImageBackground
+        source={require('./assets/images/background.png')}
+        resizeMode="cover"
+        style={styles.rootScreen}
+        imageStyle={styles.backgroundImage}
+      >
+        <StatusBar style="auto" />
+        <Header title="Guess a Number" />
+        <SafeAreaView style={styles.rootScreen}>{content}</SafeAreaView>
+      </ImageBackground>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
-  screen: {
+  rootScreen: {
     flex: 1,
+  },
+  backgroundImage: {
+    opacity: 0.35,
   },
 });
 
