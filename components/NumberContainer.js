@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 
 import Colors from '../constants/colors';
 
@@ -11,11 +11,16 @@ const NumberContainer = (props) => {
   );
 };
 
+// ios, no difference between screen and window
+// android: screen - entire available width and height including the status bar, window - excluding the status bar
+const deviceWidth = Dimensions.get('window').width;
+
 const styles = StyleSheet.create({
   container: {
     borderWidth: 2,
     borderColor: Colors.primary,
-    padding: 10,
+    padding: deviceWidth < 380 ? 12 : 24,
+    margin: deviceWidth < 380 ? 12 : 24,
     borderRadius: 10,
     marginVertical: 10,
     alignItems: 'center',
@@ -23,7 +28,7 @@ const styles = StyleSheet.create({
   },
   number: {
     color: Colors.primary,
-    fontSize: 22,
+    fontSize: deviceWidth < 380 ? 28 : 36,
   },
 });
 

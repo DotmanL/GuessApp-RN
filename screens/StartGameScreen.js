@@ -6,13 +6,15 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
+  Dimensions,
+  useWindowDimensions,
 } from 'react-native';
 
 import Card from '../components/Card';
 import Colors from '../constants/colors';
 import Input from '../components/Input';
 import NumberContainer from '../components/NumberContainer';
-import BodyText from '../components/BodyText';
+import InstructionText from '../components/InstructionText';
 import Title from '../components/Title';
 import CustomButton from '../components/CustomButton';
 
@@ -20,6 +22,7 @@ const StartGameScreen = (props) => {
   const [enteredValue, setEnteredValue] = useState('');
   const [confirmed, setConfirmed] = useState(false);
   const [selectedNumber, setSelectedNumber] = useState('');
+  const { width, height } = useWindowDimensions();
 
   const numberInputHandler = (inputText) => {
     setEnteredValue(inputText.replace(/[^0-9]/g, ''));
@@ -51,7 +54,7 @@ const StartGameScreen = (props) => {
   if (confirmed) {
     confirmedOutput = (
       <Card style={styles.summaryContainer}>
-        <BodyText>You Selected</BodyText>
+        <InstructionText>You Selected</InstructionText>
         <NumberContainer>{selectedNumber}</NumberContainer>
         <CustomButton onPress={() => props.onStartGame(selectedNumber)}>
           START GAME
@@ -63,16 +66,18 @@ const StartGameScreen = (props) => {
   //TouchableWithoutFeedback and Keyboard was added to enable dismiss with an onPress prop
   // the keyboard on click outside in ios
 
+  const marginTopDistance = height < 380 ? 30 : 100;
+
   return (
     <TouchableWithoutFeedback
       onPress={() => {
         Keyboard.dismiss();
       }}
     >
-      <View style={styles.screen}>
-        <Title style={styles.title}> Start a New Game</Title>
+      <View style={[styles.rootContainer, { marginTop: marginTopDistance }]}>
+        <Title style={styles.title}> Gueess My Number</Title>
         <Card style={styles.inputContainer}>
-          <BodyText>Select a Number</BodyText>
+          <InstructionText>Enter a Number</InstructionText>
           <Input
             style={styles.input}
             blurOnSubmit
@@ -106,10 +111,12 @@ const StartGameScreen = (props) => {
   );
 };
 
+const deviceHeight = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
-  screen: {
+  rootContainer: {
     flex: 1,
-    padding: 10,
+    marginTop: deviceHeight < 380 ? 30 : 100,
     alignItems: 'center',
   },
   title: {

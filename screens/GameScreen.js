@@ -1,15 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Alert,
-  ScrollView,
-  FlatList,
-} from 'react-native';
+import { View, Text, StyleSheet, Alert, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import NumberContainer from '../components/NumberContainer';
-import BodyText from '../components/BodyText';
+import InstructionText from '../components/InstructionText';
 import Card from '../components/Card';
 import DefaultStyles from '../constants/default-styles';
 import CustomButton from '../components/CustomButton';
@@ -26,18 +19,11 @@ const generateRandomBetween = (min, max, exclude) => {
   }
 };
 
-// const renderListItem = (value, numOfRound) => (
-//   <View key={value} style={styles.listItem}>
-//     <BodyText>#{numOfRound}</BodyText>
-//     <BodyText>{value}</BodyText>
-//   </View>
-// );
-
 //When using a flatlist
 const renderListItem = (listLength, itemData) => (
   <View style={styles.listItem}>
-    <BodyText>#{listLength - itemData.index}</BodyText>
-    <BodyText>{itemData.item}</BodyText>
+    <InstructionText>#{listLength - itemData.index}</InstructionText>
+    <InstructionText>{itemData.item}</InstructionText>
   </View>
 );
 
@@ -79,7 +65,6 @@ const GameScreen = ({ userChoice, onGameOver }) => {
     );
     setCurrentGuess(nextNumber);
     //when using flatlist, expect our key to be  a string
-    // setPastGuesses((currPastGuesses) => [nextNumber, ...currPastGuesses]);
     setPastGuesses((currPastGuesses) => [
       nextNumber.toString(),
       ...currPastGuesses,
@@ -137,7 +122,6 @@ const styles = StyleSheet.create({
   },
   list: {
     flexGrow: 1,
-    // alignItems: 'center',
     justifyContent: 'flex-end',
   },
   listItem: {
