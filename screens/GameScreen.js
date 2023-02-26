@@ -5,7 +5,7 @@ import NumberContainer from '../components/NumberContainer';
 import InstructionText from '../components/InstructionText';
 import Card from '../components/Card';
 import DefaultStyles from '../constants/default-styles';
-import CustomButton from '../components/CustomButton';
+import PrimaryButton from '../components/PrimaryButton';
 
 const generateRandomBetween = (min, max, exclude) => {
   min = Math.ceil(min);
@@ -76,12 +76,12 @@ const GameScreen = ({ userChoice, onGameOver }) => {
       <Text style={DefaultStyles.title}>Opponent's Guess</Text>
       <NumberContainer>{currentGuess}</NumberContainer>
       <Card style={styles.buttonContainer}>
-        <CustomButton onPress={() => nextGuessHandler('lower')}>
+        <PrimaryButton onPress={() => nextGuessHandler('lower')}>
           <Ionicons name="md-remove" size={24} color="white" />
-        </CustomButton>
-        <CustomButton onPress={() => nextGuessHandler('greater')}>
+        </PrimaryButton>
+        <PrimaryButton onPress={() => nextGuessHandler('greater')}>
           <Ionicons name="md-add" size={24} color="white" />
-        </CustomButton>
+        </PrimaryButton>
       </Card>
       <View style={styles.listContainer}>
         {/* <ScrollView contentContainerStyle={styles.list}>

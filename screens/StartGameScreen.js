@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import {
+  TextInput,
   View,
   StyleSheet,
   Button,
-  TouchableWithoutFeedback,
   Keyboard,
   Alert,
   Dimensions,
   useWindowDimensions,
+  ScrollView,
+  KeyboardAvoidingView,
 } from 'react-native';
 
 import Card from '../components/Card';
@@ -16,7 +18,7 @@ import Input from '../components/Input';
 import NumberContainer from '../components/NumberContainer';
 import InstructionText from '../components/InstructionText';
 import Title from '../components/Title';
-import CustomButton from '../components/CustomButton';
+import PrimaryButton from '../components/PrimaryButton';
 
 const StartGameScreen = (props) => {
   const [enteredValue, setEnteredValue] = useState('');
@@ -56,67 +58,65 @@ const StartGameScreen = (props) => {
       <Card style={styles.summaryContainer}>
         <InstructionText>You Selected</InstructionText>
         <NumberContainer>{selectedNumber}</NumberContainer>
-        <CustomButton onPress={() => props.onStartGame(selectedNumber)}>
+        <PrimaryButton onPress={() => props.onStartGame(selectedNumber)}>
           START GAME
-        </CustomButton>
+        </PrimaryButton>
       </Card>
     );
   }
 
-  //TouchableWithoutFeedback and Keyboard was added to enable dismiss with an onPress prop
-  // the keyboard on click outside in ios
-
   const marginTopDistance = height < 380 ? 30 : 100;
 
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        Keyboard.dismiss();
-      }}
-    >
-      <View style={[styles.rootContainer, { marginTop: marginTopDistance }]}>
-        <Title style={styles.title}> Gueess My Number</Title>
-        <Card style={styles.inputContainer}>
-          <InstructionText>Enter a Number</InstructionText>
-          <Input
-            style={styles.input}
-            blurOnSubmit
-            autoCapitalize="none"
-            autoCorrect={false}
-            keyboardType="number-pad"
-            maxLength={2}
-            onChangeText={numberInputHandler}
-            value={enteredValue}
-          />
-          <View style={styles.buttonContainer}>
-            <View style={styles.button}>
-              <Button
-                title="Reset"
-                onPress={resetInputHandler}
-                color={Colors.secondary}
-              />
+    <ScrollView style={styles.screen}>
+      <KeyboardAvoidingView style={styles.screen} behavior="position">
+        <View style={[styles.rootContainer, { marginTop: marginTopDistance }]}>
+          <Title style={styles.title}> Gueess My Number</Title>
+          <Card style={styles.inputContainer}>
+            <InstructionText>Enter a Number</InstructionText>
+            <TextInput
+              style={styles.numberInput}
+              blurOnSubmit
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="number-pad"
+              maxLength={2}
+              onChangeText={numberInputHandler}
+              value={enteredValue}
+            />
+            <View style={styles.buttonContainer}>
+              <View style={styles.button}>
+                <Button
+                  title="Reset"
+                  onPress={resetInputHandler}
+                  color={Colors.secondary}
+                />
+              </View>
+              <View style={styles.button}>
+                <Button
+                  title="Confirm"
+                  onPress={confirmInputHandler}
+                  color={Colors.primary}
+                />
+              </View>
             </View>
-            <View style={styles.button}>
-              <Button
-                title="Confirm"
-                onPress={confirmInputHandler}
-                color={Colors.primary}
-              />
-            </View>
-          </View>
-        </Card>
-        {confirmedOutput}
-      </View>
-    </TouchableWithoutFeedback>
+          </Card>
+          {confirmedOutput}
+        </View>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
 const deviceHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+  },
   rootContainer: {
     flex: 1,
-    marginTop: deviceHeight < 380 ? 30 : 100,
+    // marginTop: deviceHeight < 380 ? 30 : 100,
     alignItems: 'center',
   },
   title: {
@@ -139,8 +139,13 @@ const styles = StyleSheet.create({
   button: {
     width: 100,
   },
-  input: {
+  numberInput: {
+    height: 50,
     width: 50,
+    fontSize: 32,
+    borderBottomWidth: 2,
+    marginVertical: 8,
+    fontWeight: 'bold',
     textAlign: 'center',
   },
   summaryContainer: {
