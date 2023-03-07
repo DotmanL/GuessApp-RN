@@ -1,5 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert, FlatList } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  FlatList,
+  useWindowDimensions,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import NumberContainer from '../components/NumberContainer';
 import InstructionText from '../components/InstructionText';
@@ -27,9 +34,11 @@ const renderListItem = (listLength, itemData) => (
   </View>
 );
 
-const GameScreen = ({ userChoice, onGameOver }) => {
+function GameScreen(props) {
+  const { userChoice, onGameOver } = props;
   const initialGuess = generateRandomBetween(1, 100, userChoice);
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
+  const { width, height } = useWindowDimensions();
 
   // const [pastGuesses, setPastGuesses] = useState([initialGuess]);
   //when using flatlist, expect our key to be  a string
@@ -71,24 +80,54 @@ const GameScreen = ({ userChoice, onGameOver }) => {
     ]);
   };
 
+  let content = (
+    <>
+      <NumberContainer>{currentGuess}</NumberContainer>
+      <Card>
+        <InstructionText style={styles.instructionText}>
+          Higher or lower?
+        </InstructionText>
+        <View style={styles.buttonsContainer}>
+          <View style={styles.buttonContainer}>
+            <PrimaryButton onPress={nextGuessHandler.bind(this, 'lower')}>
+              <Ionicons name="md-remove" size={24} color="white" />
+            </PrimaryButton>
+          </View>
+          <View style={styles.buttonContainer}>
+            <PrimaryButton onPress={nextGuessHandler.bind(this, 'greater')}>
+              <Ionicons name="md-add" size={24} color="white" />
+            </PrimaryButton>
+          </View>
+        </View>
+      </Card>
+    </>
+  );
+
+  // we are in landscape mode, different view here
+  if (width > 500) {
+    content = (
+      <>
+        <View style={styles.buttonsContainerWide}>
+          <View style={styles.buttonContainer}>
+            <PrimaryButton onPress={nextGuessHandler.bind(this, 'lower')}>
+              <Ionicons name="md-remove" size={24} color="white" />
+            </PrimaryButton>
+          </View>
+          <NumberContainer>{currentGuess}</NumberContainer>
+          <View style={styles.buttonContainer}>
+            <PrimaryButton onPress={nextGuessHandler.bind(this, 'greater')}>
+              <Ionicons name="md-add" size={24} color="white" />
+            </PrimaryButton>
+          </View>
+        </View>
+      </>
+    );
+  }
   return (
     <View style={styles.screen}>
       <Text style={DefaultStyles.title}>Opponent's Guess</Text>
-      <NumberContainer>{currentGuess}</NumberContainer>
-      <Card style={styles.buttonContainer}>
-        <PrimaryButton onPress={() => nextGuessHandler('lower')}>
-          <Ionicons name="md-remove" size={24} color="white" />
-        </PrimaryButton>
-        <PrimaryButton onPress={() => nextGuessHandler('greater')}>
-          <Ionicons name="md-add" size={24} color="white" />
-        </PrimaryButton>
-      </Card>
+      {content}
       <View style={styles.listContainer}>
-        {/* <ScrollView contentContainerStyle={styles.list}>
-          {pastGuesses.map((guess, index) =>
-            renderListItem(guess, pastGuesses.length - index)
-          )}
-        </ScrollView> */}
         <FlatList
           keyExtractor={(item) => item}
           data={pastGuesses}
@@ -100,7 +139,7 @@ const GameScreen = ({ userChoice, onGameOver }) => {
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   screen: {
@@ -108,17 +147,24 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: 'center',
   },
-  buttonContainer: {
+  buttonsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-    width: 400,
-    maxWidth: '70%',
+  },
+  buttonsContainerWide: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  buttonContainer: {
+    flex: 1,
   },
   listContainer: {
     width: '60%',
     flex: 1,
-    marginVertical: 10,
+    padding: 12,
+    marginTop: -10,
+  },
+  instructionText: {
+    marginBottom: 10,
   },
   list: {
     flexGrow: 1,
