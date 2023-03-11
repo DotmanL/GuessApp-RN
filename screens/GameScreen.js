@@ -26,14 +26,6 @@ const generateRandomBetween = (min, max, exclude) => {
   }
 };
 
-//When using a flatlist
-const renderListItem = (listLength, itemData) => (
-  <View style={styles.listItem}>
-    <InstructionText>#{listLength - itemData.index}</InstructionText>
-    <InstructionText>{itemData.item}</InstructionText>
-  </View>
-);
-
 function GameScreen(props) {
   const { userChoice, onGameOver } = props;
   const initialGuess = generateRandomBetween(1, 100, userChoice);
@@ -51,6 +43,14 @@ function GameScreen(props) {
       onGameOver(pastGuesses.length);
     }
   }, [currentGuess, onGameOver, userChoice]);
+
+  //When using a flatlist
+  const renderListItem = (listLength, itemData) => (
+    <View style={styles.listItem}>
+      <InstructionText>#{listLength - itemData.index}</InstructionText>
+      <InstructionText>{itemData.item}</InstructionText>
+    </View>
+  );
 
   const nextGuessHandler = (direction) => {
     if (

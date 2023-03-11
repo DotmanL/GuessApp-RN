@@ -14,7 +14,6 @@ import {
 
 import Card from '../components/Card';
 import Colors from '../constants/colors';
-import Input from '../components/Input';
 import NumberContainer from '../components/NumberContainer';
 import InstructionText from '../components/InstructionText';
 import Title from '../components/Title';
@@ -71,7 +70,7 @@ const StartGameScreen = (props) => {
     <ScrollView style={styles.screen}>
       <KeyboardAvoidingView style={styles.screen} behavior="position">
         <View style={[styles.rootContainer, { marginTop: marginTopDistance }]}>
-          <Title style={styles.title}> Gueess My Number</Title>
+          <Title style={styles.title}> Guess My Number</Title>
           <Card style={styles.inputContainer}>
             <InstructionText>Enter a Number</InstructionText>
             <TextInput
